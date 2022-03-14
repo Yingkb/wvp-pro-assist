@@ -1,7 +1,5 @@
 package top.panll.assist.config;
 
-import net.bramp.ffmpeg.FFmpeg;
-import net.bramp.ffmpeg.FFprobe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import top.panll.assist.dto.UserSettings;
-import top.panll.assist.service.FFmpegExecUtils;
+import top.panll.assist.dto.UserSettingsDTO;
 import top.panll.assist.service.VideoFileService;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -29,7 +29,7 @@ public class StartConfig implements CommandLineRunner {
     private String port;
 
     @Autowired
-    private UserSettings userSettings;
+    private UserSettingsDTO userSettings;
 
     @Autowired
     private VideoFileService videoFileService;

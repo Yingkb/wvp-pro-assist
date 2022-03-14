@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import top.panll.assist.dto.MergeOrCutTaskInfo;
-import top.panll.assist.dto.UserSettings;
+import top.panll.assist.dto.MergeOrCutTaskInfoDTO;
+import top.panll.assist.dto.UserSettingsDTO;
 import top.panll.assist.utils.RedisUtil;
 
 import java.io.File;
@@ -27,7 +27,7 @@ public class FileManagerTimer {
     private final static Logger logger = LoggerFactory.getLogger(FileManagerTimer.class);
 
     @Autowired
-    private UserSettings userSettings;
+    private UserSettingsDTO userSettings;
 
     @Autowired
     private VideoFileService videoFileService;
@@ -132,7 +132,7 @@ public class FileManagerTimer {
         List<Object> taskKeys = redisUtil.scan(key);
         for (Object taskKeyObj : taskKeys) {
             String taskKey = (String) taskKeyObj;
-            MergeOrCutTaskInfo mergeOrCutTaskInfo = (MergeOrCutTaskInfo)redisUtil.get(taskKey);
+            MergeOrCutTaskInfoDTO mergeOrCutTaskInfo = (MergeOrCutTaskInfoDTO)redisUtil.get(taskKey);
             try {
                 if (StringUtils.isEmpty(mergeOrCutTaskInfo.getCreateTime())
                         || simpleDateFormatForTime.parse(mergeOrCutTaskInfo.getCreateTime()).before(lastTempDate)) {

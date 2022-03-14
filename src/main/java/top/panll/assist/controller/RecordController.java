@@ -13,13 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.panll.assist.controller.bean.WVPResult;
-import top.panll.assist.dto.MergeOrCutTaskInfo;
-import top.panll.assist.dto.SignInfo;
-import top.panll.assist.dto.SpaceInfo;
+import top.panll.assist.dto.MergeOrCutTaskInfoDTO;
+import top.panll.assist.dto.SignInfoDTO;
+import top.panll.assist.dto.SpaceInfoDTO;
 import top.panll.assist.service.VideoFileService;
 import top.panll.assist.utils.PageInfo;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -277,13 +276,13 @@ public class RecordController {
     })
     @GetMapping(value = "/file/download/task/list")
     @ResponseBody
-    public WVPResult<List<MergeOrCutTaskInfo>> getTaskListForDownload(
+    public WVPResult<List<MergeOrCutTaskInfoDTO>> getTaskListForDownload(
             @RequestParam(required = false) String app,
             @RequestParam(required = false) String stream,
             @RequestParam(required = false) String taskId,
             @RequestParam(required = false) Boolean isEnd){
-        List<MergeOrCutTaskInfo> taskList = videoFileService.getTaskListForDownload(isEnd, app, stream, taskId);
-        WVPResult<List<MergeOrCutTaskInfo>> result = new WVPResult<>();
+        List<MergeOrCutTaskInfoDTO> taskList = videoFileService.getTaskListForDownload(isEnd, app, stream, taskId);
+        WVPResult<List<MergeOrCutTaskInfoDTO>> result = new WVPResult<>();
         result.setCode(0);
         result.setMsg(taskList !=  null?"success":"error");
         result.setData(taskList);
@@ -347,13 +346,13 @@ public class RecordController {
     })
     @GetMapping(value = "/file/collection/list")
     @ResponseBody
-    public WVPResult<List<SignInfo>> collectionList(
+    public WVPResult<List<SignInfoDTO>> collectionList(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String app,
             @RequestParam(required = false) String stream){
 
-        List<SignInfo> signInfos = videoFileService.getCollectionList(app, stream, type);
-        WVPResult<List<SignInfo>> result = new WVPResult<>();
+        List<SignInfoDTO> signInfos = videoFileService.getCollectionList(app, stream, type);
+        WVPResult<List<SignInfoDTO>> result = new WVPResult<>();
         result.setCode(0);
         result.setMsg(signInfos != null ?"success":"error");
         result.setData(signInfos);
@@ -386,14 +385,15 @@ public class RecordController {
     @ResponseBody
     @PostMapping(value = "/on_record_mp4", produces = "application/json;charset=UTF-8")
     public ResponseEntity<String> onRecordMp4(@RequestBody JSONObject json) {
+        logger.info("录制完成的通知, 对用zlm的hook");
         JSONObject ret = new JSONObject();
         ret.put("code", 0);
         ret.put("msg", "success");
         String file_path = json.getString("file_path");
-        logger.debug("ZLM 录制完成，参数：" + file_path);
+        logger.info("ZLM 录制完成，参数：{}" , file_path);
+        // /usr/local/ZLMediaKit/release/linux/Debug/www/record/rtp/0614838D/2022-03-09/18-05-06.mp4
         if (file_path == null) return new ResponseEntity<String>(ret.toString(), HttpStatus.OK);
         videoFileService.handFile(new File(file_path));
-
         return new ResponseEntity<String>(ret.toString(), HttpStatus.OK);
     }
 
@@ -407,7 +407,7 @@ public class RecordController {
         JSONObject ret = new JSONObject();
         ret.put("code", 0);
         ret.put("msg", "success");
-        SpaceInfo spaceInfo = videoFileService.getSpaceInfo();
+        SpaceInfoDTO spaceInfo = videoFileService.getSpaceInfo();
         ret.put("data", JSON.toJSON(spaceInfo));
         return new ResponseEntity<>(ret.toString(), HttpStatus.OK);
     }

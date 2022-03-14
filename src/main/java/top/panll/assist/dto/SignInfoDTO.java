@@ -1,6 +1,6 @@
 package top.panll.assist.dto;
 
-public class SignInfo {
+public class SignInfoDTO {
     private String app;
     private String stream;
     private String type;

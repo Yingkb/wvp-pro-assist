@@ -1,6 +1,6 @@
 package top.panll.assist.dto;
 
-public class SpaceInfo {
+public class SpaceInfoDTO {
     private long total;
     private long free;
 

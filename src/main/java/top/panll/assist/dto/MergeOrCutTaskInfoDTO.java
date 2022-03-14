@@ -1,7 +1,7 @@
 package top.panll.assist.dto;
 
 
-public class MergeOrCutTaskInfo {
+public class MergeOrCutTaskInfoDTO {
     private String id;
     private String app;
     private String stream;

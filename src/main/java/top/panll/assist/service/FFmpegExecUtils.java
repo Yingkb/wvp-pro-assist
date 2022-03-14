@@ -2,28 +2,23 @@ package top.panll.assist.service;
 
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
-import net.bramp.ffmpeg.FFmpegUtils;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.job.FFmpegJob;
-import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import net.bramp.ffmpeg.progress.Progress;
-import net.bramp.ffmpeg.progress.ProgressListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.util.DigestUtils;
-import top.panll.assist.dto.UserSettings;
+import top.panll.assist.dto.UserSettingsDTO;
 import top.panll.assist.utils.RedisUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -31,23 +26,8 @@ import java.util.concurrent.TimeUnit;
 public class FFmpegExecUtils implements InitializingBean{
 
     private final static Logger logger = LoggerFactory.getLogger(FFmpegExecUtils.class);
-//    private static FFmpegExecUtils instance;
-//
-//    public FFmpegExecUtils() {
-//    }
-//
-//    public static FFmpegExecUtils getInstance(){
-//        if(instance==null){
-//            synchronized (FFmpegExecUtils.class){
-//                if(instance==null){
-//                    instance=new FFmpegExecUtils();
-//                }
-//            }
-//        }
-//        return instance;
-//    }
     @Autowired
-    private UserSettings userSettings;
+    private UserSettingsDTO userSettings;
 
     @Autowired
     private RedisUtil redisUtil;
@@ -78,18 +58,17 @@ public class FFmpegExecUtils implements InitializingBean{
 
     @Async
     public void mergeOrCutFile(List<File> fils, File dest,  String destFileName, VideoHandEndCallBack callBack){
-
         if (fils == null || fils.size() == 0 || ffmpeg == null || ffprobe == null || dest== null || !dest.exists()){
             callBack.run("error", 0.0, null);
             return;
         }
-
         File tempFile = new File(dest.getAbsolutePath());
         if (!tempFile.exists()) {
             tempFile.mkdirs();
         }
         FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
         String fileListName = tempFile.getAbsolutePath() + File.separator + "fileList";
+        logger.info("fileListName:{}",fileListName);
         double durationAll = 0.0;
         try {
             BufferedWriter bw =new BufferedWriter(new FileWriter(fileListName));
@@ -109,9 +88,7 @@ public class FFmpegExecUtils implements InitializingBean{
             callBack.run("error", 0.0, null);
         }
         String recordFileResultPath = dest.getAbsolutePath() + File.separator + destFileName + ".mp4";
-        long startTime = System.currentTimeMillis();
         FFmpegBuilder builder = new FFmpegBuilder()
-
                 .setFormat("concat")
                 .overrideOutputFiles(true)
                 .setInput(fileListName) // Or filename
@@ -127,18 +104,6 @@ public class FFmpegExecUtils implements InitializingBean{
         FFmpegJob job = executor.createJob(builder, (Progress progress) -> {
             final double duration_ns = finalDurationAll * TimeUnit.SECONDS.toNanos(1);
             double percentage = progress.out_time_ns / duration_ns;
-
-            // Print out interesting information about the progress
-//            System.out.println(String.format(
-//                    "[%.0f%%] status:%s frame:%d time:%s ms fps:%.0f speed:%.2fx",
-//                    percentage * 100,
-//                    progress.status,
-//                    progress.frame,
-//                    FFmpegUtils.toTimecode(progress.out_time_ns, TimeUnit.NANOSECONDS),
-//                    progress.fps.doubleValue(),
-//                    progress.speed
-//            ));
-
             if (progress.status.equals(Progress.Status.END)){
                 callBack.run(progress.status.name(), percentage, recordFileResultPath);
             }else {
