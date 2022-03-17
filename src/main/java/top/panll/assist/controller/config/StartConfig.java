@@ -1,5 +1,6 @@
-package top.panll.assist.config;
+package top.panll.assist.controller.config;
 
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import top.panll.assist.dto.OSSInfoDTO;
 import top.panll.assist.dto.UserSettingsDTO;
 import top.panll.assist.service.VideoFileService;
+import top.panll.assist.utils.TqOSSClientUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,9 +37,14 @@ public class StartConfig implements CommandLineRunner {
     @Autowired
     private VideoFileService videoFileService;
 
+    @Autowired
+    private OSSInfoDTO ossInfoDTO;
+
 
     @Override
     public void run(String... args) {
+        logger.info("OSSInfoDTO info:{}", JSON.toJSONString(ossInfoDTO));
+        TqOSSClientUtil.initTqOssClient(ossInfoDTO);
         String record = userSettings.getRecord();
         if (!record.endsWith(File.separator)) {
             userSettings.setRecord(userSettings.getRecord() + File.separator);
@@ -132,7 +140,5 @@ public class StartConfig implements CommandLineRunner {
         } catch (IOException e) {
             logger.error("写入html页面错误", e);
         }
-
-
     }
 }

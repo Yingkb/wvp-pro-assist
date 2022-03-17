@@ -1,67 +1,45 @@
 package top.panll.assist;
 
 import com.alibaba.fastjson.JSON;
+import com.tianque.light.oss.sdk.model.PutObjectResult;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import top.panll.assist.controller.bean.WVPResult;
-import top.panll.assist.dto.MinioFileDTO;
-import top.panll.assist.enums.SuccessMsgEnum;
-import top.panll.assist.service.VideoFileService;
-import top.panll.assist.utils.MinioFileUtil;
+import top.panll.assist.dao.DeviceChannelMapper;
+import top.panll.assist.entity.DeviceChannel;
+import top.panll.assist.utils.TqOSSClientUtil;
+
+import java.io.File;
 
 @SpringBootTest
 class WvpProAssistApplicationTests {
-
     @Autowired
-    private VideoFileService videoFileService;
+    private DeviceChannelMapper deviceChannelMapper;
 
+    @SneakyThrows
     @Test
-    void upload() {
-        MinioFileDTO  minioFileDTO = MinioFileDTO.builder()
-                .bucket("tq-02")
-                .fileName("0203.mp4")
-                .fileRootName("01/20220310")
-                .filePath("C:\\Users\\TQ-BJB0280\\Desktop\\001.mp4")
-                .build();
-        WVPResult<String> wvpResult = MinioFileUtil.uploadFile(minioFileDTO);
-        System.out.println(JSON.toJSONString(wvpResult));
+    public void uploadFile() {
+        File file = new File("C:\\Users\\TQ-BJB0280\\Desktop\\18_16_33-18_20_31-238605.mp4");
+        PutObjectResult putObjectResult = TqOSSClientUtil.putObject(file, "001.png", "06146CAF");
+        System.out.println(JSON.toJSONString(putObjectResult));
+        String internalEndpointUrlByUri = TqOSSClientUtil.getInternalEndpointUrlByUri(putObjectResult.getOssUri());
+        System.out.println(internalEndpointUrlByUri);
     }
 
     @Test
-    void removeBucket(){
-        WVPResult<String> wvpResult = MinioFileUtil.removeBucket("test-01");
-        System.out.println(JSON.toJSONString(wvpResult));
+    public void selectByStreamId() {
+        DeviceChannel deviceChannel = deviceChannelMapper.selectByStreamId("06146CAF");
+        System.out.println(JSON.toJSONString(deviceChannel));
     }
 
     @Test
-    void removeFile(){
-        MinioFileDTO  minioFileDTO = MinioFileDTO.builder()
-                .bucket("tq-02")
-                .fileName("0203.mp4")
-                .fileRootName("01/20220310")
-                .build();
-        WVPResult<String> wvpResult = MinioFileUtil.removeObj(minioFileDTO);
-        System.out.println(JSON.toJSONString(wvpResult));
+    public void searchByEntity() {
+        DeviceChannel deviceChannel = new DeviceChannel();
+        deviceChannel.setChannelId("34020000001320000001");
+        deviceChannel.setDeviceId("7010200492000000009");
+        deviceChannel = deviceChannelMapper.searchByEntity(deviceChannel);
+        System.out.println(JSON.toJSONString(deviceChannel));
     }
-
-    @Test
-    void getUrl(){
-        MinioFileDTO  minioFileDTO = MinioFileDTO.builder()
-                .bucket("tq-02")
-                .fileName("0203.mp4")
-                .fileRootName("01/20220310")
-                .build();
-        WVPResult<String> wvpResult = MinioFileUtil.getObjectUrl(minioFileDTO);
-        System.out.println(JSON.toJSONString(wvpResult));
-    }
-
-    @Test
-    void handle(){
-
-    }
-
-
-
 
 }

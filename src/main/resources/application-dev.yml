@@ -21,7 +21,7 @@ spring:
 
 # [可选] WVP监听的HTTP端口, 网页和接口调用都是这个端口
 server:
-    port: 18081
+    port: 18083
     # [可选] HTTPS配置， 默认不开启
     ssl:
         # [可选] 是否开启HTTPS访问
@@ -36,8 +36,8 @@ server:
 # [根据业务需求配置]
 userSettings:
     # [必选 ] zlm配置的录像路径
-    record: C:\Users\TQ-BJB0280\Desktop\record
 #    record: /media/lin/Server/ZLMediaKit/dev/ZLMediaKit/release/linux/Debug/www/record
+    record: C:\Users\TQ-BJB0280\Desktop\record
     # [可选 ] 录像保存时长（单位： 天）每天晚12点自动对过期文件执行清理
     recordDay: 7
     # [可选 ] 录像下载合成临时文件保存时长， 不配置默认取值recordDay（单位： 天）每天晚12点自动对过期文件执行清理
@@ -51,17 +51,37 @@ userSettings:
     # [可选 ] 限制 ffmpeg 合并文件使用的线程数，间接限制cpu使用率， 默认2 限制到50%
     threads: 2
 #存储服务器
-minio:
-   end_point: 192.168.216.129
-   end_point_port: 9001
-   access_key: 123456789
-   secret_key: 987654321
-   bucket: test
+tqoss:
+  ossProtocol: TQFS
+  endpoint: 192.168.110.148:20000
+  internalEndpoint: 192.168.110.148:20000
+  project: test
+  bucket: test-video
+  accessKey: FcZXiqt256fYOzJv
+  accessSecret: LnHozBHjqqAWQXBgy0DTVFUaRfOjN1oJ
 
+#实体类别名
+mybatis-plus:
+  #映射文件的位置
+  mapper-locations: classpath*:top/panll/assist/mapper/**/**.xml
+  global-config:
+    db-config:
+      id-type: auto
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: top.panll.assist.entity
+
+#pagehelper
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
 
 swagger-ui:
     enabled: true
-# [可选] 日志配置, 一般不需要改
+
+knife4j:
+  enable: true
 logging:
     file:
         name: logs/wvp.log

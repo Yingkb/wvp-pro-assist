@@ -1,5 +1,6 @@
 package top.panll.assist.service;
 
+import com.google.common.base.Joiner;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
@@ -15,15 +16,13 @@ import org.springframework.stereotype.Component;
 import top.panll.assist.dto.UserSettingsDTO;
 import top.panll.assist.utils.RedisUtil;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class FFmpegExecUtils implements InitializingBean{
+public class FFmpegExecUtils implements InitializingBean {
 
     private final static Logger logger = LoggerFactory.getLogger(FFmpegExecUtils.class);
     @Autowired
@@ -57,8 +56,8 @@ public class FFmpegExecUtils implements InitializingBean{
     }
 
     @Async
-    public void mergeOrCutFile(List<File> fils, File dest,  String destFileName, VideoHandEndCallBack callBack){
-        if (fils == null || fils.size() == 0 || ffmpeg == null || ffprobe == null || dest== null || !dest.exists()){
+    public void mergeOrCutFile(List<File> fils, File dest, String destFileName, VideoHandEndCallBack callBack) {
+        if (fils == null || fils.size() == 0 || ffmpeg == null || ffprobe == null || dest == null || !dest.exists()) {
             callBack.run("error", 0.0, null);
             return;
         }
@@ -68,15 +67,15 @@ public class FFmpegExecUtils implements InitializingBean{
         }
         FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
         String fileListName = tempFile.getAbsolutePath() + File.separator + "fileList";
-        logger.info("fileListName:{}",fileListName);
+        logger.info("fileListName:{}", fileListName);
         double durationAll = 0.0;
         try {
-            BufferedWriter bw =new BufferedWriter(new FileWriter(fileListName));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(fileListName));
             for (File file : fils) {
                 String[] split = file.getName().split("-");
                 if (split.length != 3) continue;
                 String durationStr = split[2].replace(".mp4", "");
-                Double duration = Double.parseDouble(durationStr)/1000;
+                Double duration = Double.parseDouble(durationStr) / 1000;
                 bw.write("file " + file.getAbsolutePath());
                 bw.newLine();
                 durationAll += duration;
@@ -104,14 +103,61 @@ public class FFmpegExecUtils implements InitializingBean{
         FFmpegJob job = executor.createJob(builder, (Progress progress) -> {
             final double duration_ns = finalDurationAll * TimeUnit.SECONDS.toNanos(1);
             double percentage = progress.out_time_ns / duration_ns;
-            if (progress.status.equals(Progress.Status.END)){
+            if (progress.status.equals(Progress.Status.END)) {
                 callBack.run(progress.status.name(), percentage, recordFileResultPath);
-            }else {
+            } else {
                 callBack.run(progress.status.name(), percentage, null);
             }
 
         });
         job.run();
     }
+
+    /**
+     * 压缩视频
+     *
+     * @param convertFile 待转换的文件
+     * @param targetFile  转换后的目标文件
+     */
+    public void toCompressFile(String convertFile, String targetFile) throws IOException {
+        List<String> command = new ArrayList<>(10);
+        /**将视频压缩为 每秒15帧 平均码率600k 画面的宽与高 为1280*720*/
+        command.add(userSettings.getFfmpeg());
+        command.add("-i");
+        command.add(convertFile);
+        command.add("-r");
+        command.add("15");
+        command.add("-b:v");
+        command.add("600k");
+        command.add("-s");
+        command.add("1280x720");
+        command.add(targetFile);
+        ProcessBuilder builder = new ProcessBuilder(command);
+        Process process = null;
+        try {
+            process = builder.start();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // 使用这种方式会在瞬间大量消耗CPU和内存等系统资源，所以这里我们需要对流进行处理
+        InputStream errorStream = process.getErrorStream();
+        InputStreamReader inputStreamReader = new InputStreamReader(errorStream);
+        BufferedReader br = new BufferedReader(inputStreamReader);
+        String line = "";
+        while ((line = br.readLine()) != null) {
+        }
+        if (br != null) {
+            br.close();
+        }
+        if (inputStreamReader != null) {
+            inputStreamReader.close();
+        }
+        if (errorStream != null) {
+            errorStream.close();
+        }
+        logger.info("-------------------压缩完成---转存文件--" + targetFile + "-------------");
+    }
+
 
 }

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.panll.assist.dao.DeviceMaterialMapper">
+  <resultMap id="BaseResultMap" type="top.panll.assist.entity.DeviceMaterial">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+    <result column="channel_id" jdbcType="VARCHAR" property="channelId" />
+    <result column="material_bucket" jdbcType="VARCHAR" property="materialBucket" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="material_oss_url" jdbcType="VARCHAR" property="materialOssUrl" />
+    <result column="material_url" jdbcType="VARCHAR" property="materialUrl" />
+    <result column="material_date" jdbcType="VARCHAR" property="materialDate" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, device_id, channel_id, material_bucket, material_name, material_oss_url, material_url, 
+    material_date, created_time, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device_material
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from device_material
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="top.panll.assist.entity.DeviceMaterial">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_material (device_id, channel_id, material_bucket, 
+      material_name, material_oss_url, material_url, 
+      material_date, created_time, is_delete
+      )
+    values (#{deviceId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, #{materialBucket,jdbcType=VARCHAR}, 
+      #{materialName,jdbcType=VARCHAR}, #{materialOssUrl,jdbcType=VARCHAR}, #{materialUrl,jdbcType=VARCHAR}, 
+      #{materialDate,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="top.panll.assist.entity.DeviceMaterial">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_material
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deviceId != null">
+        device_id,
+      </if>
+      <if test="channelId != null">
+        channel_id,
+      </if>
+      <if test="materialBucket != null">
+        material_bucket,
+      </if>
+      <if test="materialName != null">
+        material_name,
+      </if>
+      <if test="materialOssUrl != null">
+        material_oss_url,
+      </if>
+      <if test="materialUrl != null">
+        material_url,
+      </if>
+      <if test="materialDate != null">
+        material_date,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null">
+        #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialBucket != null">
+        #{materialBucket,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialOssUrl != null">
+        #{materialOssUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="materialUrl != null">
+        #{materialUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="materialDate != null">
+        #{materialDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="top.panll.assist.entity.DeviceMaterial">
+    update device_material
+    <set>
+      <if test="deviceId != null">
+        device_id = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null">
+        channel_id = #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialBucket != null">
+        material_bucket = #{materialBucket,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        material_name = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialOssUrl != null">
+        material_oss_url = #{materialOssUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="materialUrl != null">
+        material_url = #{materialUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="materialDate != null">
+        material_date = #{materialDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.panll.assist.entity.DeviceMaterial">
+    update device_material
+    set device_id = #{deviceId,jdbcType=VARCHAR},
+      channel_id = #{channelId,jdbcType=VARCHAR},
+      material_bucket = #{materialBucket,jdbcType=VARCHAR},
+      material_name = #{materialName,jdbcType=VARCHAR},
+      material_oss_url = #{materialOssUrl,jdbcType=VARCHAR},
+      material_url = #{materialUrl,jdbcType=VARCHAR},
+      material_date = #{materialDate,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="searchByEntityCount" parameterType="top.panll.assist.entity.DeviceMaterial" resultType="java.lang.Integer">
+    select
+    count(*)
+    from device_material
+    <where>
+     <if test="deviceId != null">
+      device_id=#{deviceId,jdbcType=VARCHAR}
+     </if>
+     <if test="channelId != null">
+      AND channel_id=#{channelId,jdbcType=VARCHAR}
+     </if>
+     <if test="materialBucket != null">
+      AND material_bucket=#{materialBucket,jdbcType=VARCHAR}
+     </if>
+     <if test="materialName != null">
+      AND material_name=#{materialName,jdbcType=VARCHAR}
+     </if>
+     <if test="materialOssUrl != null">
+      AND material_oss_url=#{materialOssUrl,jdbcType=VARCHAR}
+     </if>
+     <if test="materialUrl != null">
+      AND material_url=#{materialUrl,jdbcType=VARCHAR}
+     </if>
+     <if test="materialDate != null">
+      AND material_date=#{materialDate,jdbcType=VARCHAR}
+     </if>
+     <if test="createdTime != null">
+      AND created_time=#{createdTime,jdbcType=TIMESTAMP}
+     </if>
+     <if test="isDelete != null">
+      AND is_delete=#{isDelete,jdbcType=CHAR}
+     </if>
+    </where>
+  </select>
+  <select id="searchByEntity" parameterType="top.panll.assist.entity.DeviceMaterial" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from device_material
+    <where>
+     <if test="deviceId != null">
+      device_id=#{deviceId,jdbcType=VARCHAR}
+     </if>
+     <if test="channelId != null">
+      AND channel_id=#{channelId,jdbcType=VARCHAR}
+     </if>
+     <if test="materialBucket != null">
+      AND material_bucket=#{materialBucket,jdbcType=VARCHAR}
+     </if>
+     <if test="materialName != null">
+      AND material_name=#{materialName,jdbcType=VARCHAR}
+     </if>
+     <if test="materialOssUrl != null">
+      AND material_oss_url=#{materialOssUrl,jdbcType=VARCHAR}
+     </if>
+     <if test="materialUrl != null">
+      AND material_url=#{materialUrl,jdbcType=VARCHAR}
+     </if>
+     <if test="materialDate != null">
+      AND material_date=#{materialDate,jdbcType=VARCHAR}
+     </if>
+     <if test="createdTime != null">
+      AND created_time=#{createdTime,jdbcType=TIMESTAMP}
+     </if>
+     <if test="isDelete != null">
+      AND is_delete=#{isDelete,jdbcType=CHAR}
+     </if>
+    </where>
+  </select>
+</mapper>

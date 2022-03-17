@@ -1,4 +1,4 @@
-package top.panll.assist.config;
+package top.panll.assist.controller.config;
 
 import com.alibaba.fastjson.parser.ParserConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

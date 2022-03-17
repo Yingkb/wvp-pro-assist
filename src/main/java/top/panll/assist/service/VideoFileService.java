@@ -1,6 +1,5 @@
 package top.panll.assist.service;
 
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
@@ -12,10 +11,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import top.panll.assist.controller.bean.WVPResult;
-import top.panll.assist.dto.*;
-import top.panll.assist.utils.Constants;
+import top.panll.assist.dto.MergeOrCutTaskInfoDTO;
+import top.panll.assist.dto.SignInfoDTO;
+import top.panll.assist.dto.SpaceInfoDTO;
+import top.panll.assist.dto.UserSettingsDTO;
 import top.panll.assist.utils.DateUtils;
-import top.panll.assist.utils.MinioFileUtil;
 import top.panll.assist.utils.RedisUtil;
 
 import java.io.File;
@@ -32,18 +32,16 @@ import java.util.*;
 public class VideoFileService {
 
     private final static Logger logger = LoggerFactory.getLogger(VideoFileService.class);
-
     @Autowired
     private UserSettingsDTO userSettings;
-
     @Autowired
     private RedisUtil redisUtil;
-
     @Autowired
     private RedisTemplate redisTemplate;
-
     @Autowired
     private FFmpegExecUtils ffmpegExecUtils;
+    @Autowired
+    private TqOssService tqOssService;
 
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -126,7 +124,7 @@ public class VideoFileService {
                 boolean b = file.renameTo(new File(newName));
                 if (b) {
                     logger.info("[处理文件] {}", newName);
-                    WVPResult<String> wvpResult = handleFileUpload(newName, userSettings.getRecord());
+                    WVPResult<String> wvpResult = tqOssService.uploadFile(newName, userSettings.getRecord());
                     logger.info("[处理文件上传]:{}", JSON.toJSONString(wvpResult));
                 }
             } catch (IOException e) {
@@ -137,29 +135,9 @@ public class VideoFileService {
         }
     }
 
-    public static WVPResult<String> handleFileUpload(String filePath, String userSettingPath) {
-        String replaceStr = userSettingPath + Constants.RTP_STR;
-        String newPath = filePath.replace(userSettingPath + Constants.RTP_STR, StrUtil.EMPTY);
-        logger.info("replaceStr:{} newPath:{}", replaceStr, newPath);
-        String[] split = newPath.split(MinioFileUtil.FILE_SEPARATOR);
-        //TODO 需要根据streamId查deviceId
-        String streamId = split[0];
-
-        String dateStr = split[1].replaceAll("-", StrUtil.EMPTY);
-        String fileName = split[2];
-        String fileRootPath = streamId + MinioFileUtil.FILE_SEPARATOR + dateStr;
-        MinioFileDTO minioFileDTO = MinioFileDTO.builder()
-                .fileName(fileName)
-                .fileRootName(fileRootPath)
-                .filePath(filePath)
-                .build();
-        return MinioFileUtil.uploadFile(minioFileDTO);
-    }
 
     public List<Map<String, String>> getList() {
-
         List<Map<String, String>> result = new ArrayList<>();
-
         List<File> appList = getAppList(true);
         if (appList != null && appList.size() > 0) {
             for (File appFile : appList) {
@@ -356,7 +334,6 @@ public class VideoFileService {
             mergeOrCutTaskInfo.setEndTime(endTimeInFile);
         }
         if (filesInTime.size() == 1) {
-
             // 文件只有一个则不合并，直接复制过去
             mergeOrCutTaskInfo.setPercentage("1");
             // 处理文件路径

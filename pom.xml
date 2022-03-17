@@ -44,27 +44,6 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-        <!-- mysql数据库 -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!--Mybatis分页插件 -->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.4.1</version>
-        </dependency>
-
-        <!-- druid数据库连接池 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.1.19</version>
-        </dependency>
-
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -103,11 +82,11 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>io.minio</groupId>
-            <artifactId>minio</artifactId>
-            <version>8.3.7</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.minio</groupId>-->
+<!--            <artifactId>minio</artifactId>-->
+<!--            <version>8.3.7</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -127,13 +106,59 @@
         </dependency>
 
         <dependency>
-            <groupId>com.tianque.doraemon</groupId>
-            <artifactId>oss-spring-boot-starter</artifactId>
-            <version>1.8.0-SNAPSHOT</version>
+            <groupId>com.tianque.light</groupId>
+            <artifactId>tq-oss-sdk</artifactId>
+            <version>3.2.2.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.tianque.doraemon</groupId>
+                    <artifactId>doraemon-core-test</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- mysql数据库 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!--Mybatis分页插件 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.4.3.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+            <version>4.2</version>
+        </dependency>
+
+        <!-- druid数据库连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.10</version>
         </dependency>
     </dependencies>
 
     <build>
+        <!--        mybatis-->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
         <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>

@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.panll.assist.dao.DeviceChannelMapper">
+  <resultMap id="BaseResultMap" type="top.panll.assist.entity.DeviceChannel">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="channelId" jdbcType="VARCHAR" property="channelId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="manufacture" jdbcType="VARCHAR" property="manufacture" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="owner" jdbcType="VARCHAR" property="owner" />
+    <result column="civilCode" jdbcType="VARCHAR" property="civilCode" />
+    <result column="block" jdbcType="VARCHAR" property="block" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="parentId" jdbcType="VARCHAR" property="parentId" />
+    <result column="safetyWay" jdbcType="INTEGER" property="safetyWay" />
+    <result column="registerWay" jdbcType="INTEGER" property="registerWay" />
+    <result column="certNum" jdbcType="VARCHAR" property="certNum" />
+    <result column="certifiable" jdbcType="INTEGER" property="certifiable" />
+    <result column="errCode" jdbcType="INTEGER" property="errCode" />
+    <result column="endTime" jdbcType="VARCHAR" property="endTime" />
+    <result column="secrecy" jdbcType="VARCHAR" property="secrecy" />
+    <result column="ipAddress" jdbcType="VARCHAR" property="ipAddress" />
+    <result column="port" jdbcType="INTEGER" property="port" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="PTZType" jdbcType="INTEGER" property="PTZType" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="longitude" jdbcType="DOUBLE" property="longitude" />
+    <result column="latitude" jdbcType="DOUBLE" property="latitude" />
+    <result column="streamId" jdbcType="VARCHAR" property="streamId" />
+    <result column="deviceId" jdbcType="VARCHAR" property="deviceId" />
+    <result column="parental" jdbcType="VARCHAR" property="parental" />
+    <result column="hasAudio" jdbcType="BIT" property="hasAudio" />
+    <result column="createTime" jdbcType="VARCHAR" property="createTime" />
+    <result column="updateTime" jdbcType="VARCHAR" property="updateTime" />
+    <result column="subCount" jdbcType="INTEGER" property="subCount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, channelId, name, manufacture, model, owner, civilCode, block, address, parentId, 
+    safetyWay, registerWay, certNum, certifiable, errCode, endTime, secrecy, ipAddress, 
+    port, password, PTZType, status, longitude, latitude, streamId, deviceId, parental, 
+    hasAudio, createTime, updateTime, subCount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device_channel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from device_channel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="top.panll.assist.entity.DeviceChannel">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_channel (channelId, name, manufacture, 
+      model, owner, civilCode, 
+      block, address, parentId, 
+      safetyWay, registerWay, certNum, 
+      certifiable, errCode, endTime, 
+      secrecy, ipAddress, port, 
+      password, PTZType, status, 
+      longitude, latitude, streamId, 
+      deviceId, parental, hasAudio, 
+      createTime, updateTime, subCount
+      )
+    values (#{channelId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{manufacture,jdbcType=VARCHAR}, 
+      #{model,jdbcType=VARCHAR}, #{owner,jdbcType=VARCHAR}, #{civilCode,jdbcType=VARCHAR}, 
+      #{block,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{safetyWay,jdbcType=INTEGER}, #{registerWay,jdbcType=INTEGER}, #{certNum,jdbcType=VARCHAR}, 
+      #{certifiable,jdbcType=INTEGER}, #{errCode,jdbcType=INTEGER}, #{endTime,jdbcType=VARCHAR}, 
+      #{secrecy,jdbcType=VARCHAR}, #{ipAddress,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER}, 
+      #{password,jdbcType=VARCHAR}, #{PTZType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, #{streamId,jdbcType=VARCHAR}, 
+      #{deviceId,jdbcType=VARCHAR}, #{parental,jdbcType=VARCHAR}, #{hasAudio,jdbcType=BIT}, 
+      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, #{subCount,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="top.panll.assist.entity.DeviceChannel">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_channel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="channelId != null">
+        channelId,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="manufacture != null">
+        manufacture,
+      </if>
+      <if test="model != null">
+        model,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="civilCode != null">
+        civilCode,
+      </if>
+      <if test="block != null">
+        block,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="parentId != null">
+        parentId,
+      </if>
+      <if test="safetyWay != null">
+        safetyWay,
+      </if>
+      <if test="registerWay != null">
+        registerWay,
+      </if>
+      <if test="certNum != null">
+        certNum,
+      </if>
+      <if test="certifiable != null">
+        certifiable,
+      </if>
+      <if test="errCode != null">
+        errCode,
+      </if>
+      <if test="endTime != null">
+        endTime,
+      </if>
+      <if test="secrecy != null">
+        secrecy,
+      </if>
+      <if test="ipAddress != null">
+        ipAddress,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="PTZType != null">
+        PTZType,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="streamId != null">
+        streamId,
+      </if>
+      <if test="deviceId != null">
+        deviceId,
+      </if>
+      <if test="parental != null">
+        parental,
+      </if>
+      <if test="hasAudio != null">
+        hasAudio,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="updateTime != null">
+        updateTime,
+      </if>
+      <if test="subCount != null">
+        subCount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="channelId != null">
+        #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacture != null">
+        #{manufacture,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="civilCode != null">
+        #{civilCode,jdbcType=VARCHAR},
+      </if>
+      <if test="block != null">
+        #{block,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyWay != null">
+        #{safetyWay,jdbcType=INTEGER},
+      </if>
+      <if test="registerWay != null">
+        #{registerWay,jdbcType=INTEGER},
+      </if>
+      <if test="certNum != null">
+        #{certNum,jdbcType=VARCHAR},
+      </if>
+      <if test="certifiable != null">
+        #{certifiable,jdbcType=INTEGER},
+      </if>
+      <if test="errCode != null">
+        #{errCode,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="secrecy != null">
+        #{secrecy,jdbcType=VARCHAR},
+      </if>
+      <if test="ipAddress != null">
+        #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="PTZType != null">
+        #{PTZType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="streamId != null">
+        #{streamId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="parental != null">
+        #{parental,jdbcType=VARCHAR},
+      </if>
+      <if test="hasAudio != null">
+        #{hasAudio,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="subCount != null">
+        #{subCount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="top.panll.assist.entity.DeviceChannel">
+    update device_channel
+    <set>
+      <if test="channelId != null">
+        channelId = #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacture != null">
+        manufacture = #{manufacture,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null">
+        owner = #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="civilCode != null">
+        civilCode = #{civilCode,jdbcType=VARCHAR},
+      </if>
+      <if test="block != null">
+        block = #{block,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parentId = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyWay != null">
+        safetyWay = #{safetyWay,jdbcType=INTEGER},
+      </if>
+      <if test="registerWay != null">
+        registerWay = #{registerWay,jdbcType=INTEGER},
+      </if>
+      <if test="certNum != null">
+        certNum = #{certNum,jdbcType=VARCHAR},
+      </if>
+      <if test="certifiable != null">
+        certifiable = #{certifiable,jdbcType=INTEGER},
+      </if>
+      <if test="errCode != null">
+        errCode = #{errCode,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null">
+        endTime = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="secrecy != null">
+        secrecy = #{secrecy,jdbcType=VARCHAR},
+      </if>
+      <if test="ipAddress != null">
+        ipAddress = #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        port = #{port,jdbcType=INTEGER},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="PTZType != null">
+        PTZType = #{PTZType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="streamId != null">
+        streamId = #{streamId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        deviceId = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="parental != null">
+        parental = #{parental,jdbcType=VARCHAR},
+      </if>
+      <if test="hasAudio != null">
+        hasAudio = #{hasAudio,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="subCount != null">
+        subCount = #{subCount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.panll.assist.entity.DeviceChannel">
+    update device_channel
+    set channelId = #{channelId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      manufacture = #{manufacture,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      owner = #{owner,jdbcType=VARCHAR},
+      civilCode = #{civilCode,jdbcType=VARCHAR},
+      block = #{block,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      parentId = #{parentId,jdbcType=VARCHAR},
+      safetyWay = #{safetyWay,jdbcType=INTEGER},
+      registerWay = #{registerWay,jdbcType=INTEGER},
+      certNum = #{certNum,jdbcType=VARCHAR},
+      certifiable = #{certifiable,jdbcType=INTEGER},
+      errCode = #{errCode,jdbcType=INTEGER},
+      endTime = #{endTime,jdbcType=VARCHAR},
+      secrecy = #{secrecy,jdbcType=VARCHAR},
+      ipAddress = #{ipAddress,jdbcType=VARCHAR},
+      port = #{port,jdbcType=INTEGER},
+      password = #{password,jdbcType=VARCHAR},
+      PTZType = #{PTZType,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      streamId = #{streamId,jdbcType=VARCHAR},
+      deviceId = #{deviceId,jdbcType=VARCHAR},
+      parental = #{parental,jdbcType=VARCHAR},
+      hasAudio = #{hasAudio,jdbcType=BIT},
+      createTime = #{createTime,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=VARCHAR},
+      subCount = #{subCount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="searchByEntityCount" parameterType="top.panll.assist.entity.DeviceChannel" resultType="java.lang.Integer">
+    select
+    count(*)
+    from device_channel
+    <where>
+     <if test="channelId != null">
+      channelId=#{channelId,jdbcType=VARCHAR}
+     </if>
+     <if test="name != null">
+      AND name=#{name,jdbcType=VARCHAR}
+     </if>
+     <if test="manufacture != null">
+      AND manufacture=#{manufacture,jdbcType=VARCHAR}
+     </if>
+     <if test="model != null">
+      AND model=#{model,jdbcType=VARCHAR}
+     </if>
+     <if test="owner != null">
+      AND owner=#{owner,jdbcType=VARCHAR}
+     </if>
+     <if test="civilCode != null">
+      AND civilCode=#{civilCode,jdbcType=VARCHAR}
+     </if>
+     <if test="block != null">
+      AND block=#{block,jdbcType=VARCHAR}
+     </if>
+     <if test="address != null">
+      AND address=#{address,jdbcType=VARCHAR}
+     </if>
+     <if test="parentId != null">
+      AND parentId=#{parentId,jdbcType=VARCHAR}
+     </if>
+     <if test="safetyWay != null">
+      AND safetyWay=#{safetyWay,jdbcType=INTEGER}
+     </if>
+     <if test="registerWay != null">
+      AND registerWay=#{registerWay,jdbcType=INTEGER}
+     </if>
+     <if test="certNum != null">
+      AND certNum=#{certNum,jdbcType=VARCHAR}
+     </if>
+     <if test="certifiable != null">
+      AND certifiable=#{certifiable,jdbcType=INTEGER}
+     </if>
+     <if test="errCode != null">
+      AND errCode=#{errCode,jdbcType=INTEGER}
+     </if>
+     <if test="endTime != null">
+      AND endTime=#{endTime,jdbcType=VARCHAR}
+     </if>
+     <if test="secrecy != null">
+      AND secrecy=#{secrecy,jdbcType=VARCHAR}
+     </if>
+     <if test="ipAddress != null">
+      AND ipAddress=#{ipAddress,jdbcType=VARCHAR}
+     </if>
+     <if test="port != null">
+      AND port=#{port,jdbcType=INTEGER}
+     </if>
+     <if test="password != null">
+      AND password=#{password,jdbcType=VARCHAR}
+     </if>
+     <if test="PTZType != null">
+      AND PTZType=#{PTZType,jdbcType=INTEGER}
+     </if>
+     <if test="status != null">
+      AND status=#{status,jdbcType=INTEGER}
+     </if>
+     <if test="longitude != null">
+      AND longitude=#{longitude,jdbcType=DOUBLE}
+     </if>
+     <if test="latitude != null">
+      AND latitude=#{latitude,jdbcType=DOUBLE}
+     </if>
+     <if test="streamId != null">
+      AND streamId=#{streamId,jdbcType=VARCHAR}
+     </if>
+     <if test="deviceId != null">
+      AND deviceId=#{deviceId,jdbcType=VARCHAR}
+     </if>
+     <if test="parental != null">
+      AND parental=#{parental,jdbcType=VARCHAR}
+     </if>
+     <if test="hasAudio != null">
+      AND hasAudio=#{hasAudio,jdbcType=BIT}
+     </if>
+     <if test="createTime != null">
+      AND createTime=#{createTime,jdbcType=VARCHAR}
+     </if>
+     <if test="updateTime != null">
+      AND updateTime=#{updateTime,jdbcType=VARCHAR}
+     </if>
+     <if test="subCount != null">
+      AND subCount=#{subCount,jdbcType=INTEGER}
+     </if>
+    </where>
+  </select>
+  <select id="searchByEntity" parameterType="top.panll.assist.entity.DeviceChannel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from device_channel
+    <where>
+     <if test="channelId != null">
+      channelId=#{channelId,jdbcType=VARCHAR}
+     </if>
+     <if test="name != null">
+      AND name=#{name,jdbcType=VARCHAR}
+     </if>
+     <if test="manufacture != null">
+      AND manufacture=#{manufacture,jdbcType=VARCHAR}
+     </if>
+     <if test="model != null">
+      AND model=#{model,jdbcType=VARCHAR}
+     </if>
+     <if test="owner != null">
+      AND owner=#{owner,jdbcType=VARCHAR}
+     </if>
+     <if test="civilCode != null">
+      AND civilCode=#{civilCode,jdbcType=VARCHAR}
+     </if>
+     <if test="block != null">
+      AND block=#{block,jdbcType=VARCHAR}
+     </if>
+     <if test="address != null">
+      AND address=#{address,jdbcType=VARCHAR}
+     </if>
+     <if test="parentId != null">
+      AND parentId=#{parentId,jdbcType=VARCHAR}
+     </if>
+     <if test="safetyWay != null">
+      AND safetyWay=#{safetyWay,jdbcType=INTEGER}
+     </if>
+     <if test="registerWay != null">
+      AND registerWay=#{registerWay,jdbcType=INTEGER}
+     </if>
+     <if test="certNum != null">
+      AND certNum=#{certNum,jdbcType=VARCHAR}
+     </if>
+     <if test="certifiable != null">
+      AND certifiable=#{certifiable,jdbcType=INTEGER}
+     </if>
+     <if test="errCode != null">
+      AND errCode=#{errCode,jdbcType=INTEGER}
+     </if>
+     <if test="endTime != null">
+      AND endTime=#{endTime,jdbcType=VARCHAR}
+     </if>
+     <if test="secrecy != null">
+      AND secrecy=#{secrecy,jdbcType=VARCHAR}
+     </if>
+     <if test="ipAddress != null">
+      AND ipAddress=#{ipAddress,jdbcType=VARCHAR}
+     </if>
+     <if test="port != null">
+      AND port=#{port,jdbcType=INTEGER}
+     </if>
+     <if test="password != null">
+      AND password=#{password,jdbcType=VARCHAR}
+     </if>
+     <if test="PTZType != null">
+      AND PTZType=#{PTZType,jdbcType=INTEGER}
+     </if>
+     <if test="status != null">
+      AND status=#{status,jdbcType=INTEGER}
+     </if>
+     <if test="longitude != null">
+      AND longitude=#{longitude,jdbcType=DOUBLE}
+     </if>
+     <if test="latitude != null">
+      AND latitude=#{latitude,jdbcType=DOUBLE}
+     </if>
+     <if test="streamId != null">
+      AND streamId=#{streamId,jdbcType=VARCHAR}
+     </if>
+     <if test="deviceId != null">
+      AND deviceId=#{deviceId,jdbcType=VARCHAR}
+     </if>
+     <if test="parental != null">
+      AND parental=#{parental,jdbcType=VARCHAR}
+     </if>
+     <if test="hasAudio != null">
+      AND hasAudio=#{hasAudio,jdbcType=BIT}
+     </if>
+     <if test="createTime != null">
+      AND createTime=#{createTime,jdbcType=VARCHAR}
+     </if>
+     <if test="updateTime != null">
+      AND updateTime=#{updateTime,jdbcType=VARCHAR}
+     </if>
+     <if test="subCount != null">
+      AND subCount=#{subCount,jdbcType=INTEGER}
+     </if>
+    </where>
+  </select>
+</mapper>

@@ -391,7 +391,6 @@ public class RecordController {
         ret.put("msg", "success");
         String file_path = json.getString("file_path");
         logger.info("ZLM 录制完成，参数：{}" , file_path);
-        // /usr/local/ZLMediaKit/release/linux/Debug/www/record/rtp/0614838D/2022-03-09/18-05-06.mp4
         if (file_path == null) return new ResponseEntity<String>(ret.toString(), HttpStatus.OK);
         videoFileService.handFile(new File(file_path));
         return new ResponseEntity<String>(ret.toString(), HttpStatus.OK);

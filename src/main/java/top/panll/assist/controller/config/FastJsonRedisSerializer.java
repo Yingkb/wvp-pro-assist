@@ -1,4 +1,4 @@
-package top.panll.assist.config;
+package top.panll.assist.controller.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
@@ -17,7 +17,9 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
      * 解决redis反序列化对象时报错 ：com.alibaba.fastjson.JSONException: autoType is not support
      */
     static {
-        ParserConfig.getGlobalInstance().addAccept("top.panll.assist");
+        ParserConfig.getGlobalInstance()
+                .addAccept("top.panll.assist");
+
     }
 
     public FastJsonRedisSerializer(Class<T> clazz) {

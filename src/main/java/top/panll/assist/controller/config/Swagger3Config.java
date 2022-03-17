@@ -1,4 +1,4 @@
-package top.panll.assist.config;
+package top.panll.assist.controller.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

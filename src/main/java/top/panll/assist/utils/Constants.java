@@ -8,4 +8,8 @@ package top.panll.assist.utils;
 public class Constants {
 
     public static final String RTP_STR = "rtp/";
+
+    public static final String FILE_SEPARATOR = "/";
+
+    public static final String SPLIT_BAR = "_";
 }
